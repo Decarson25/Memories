@@ -14,24 +14,25 @@ function debounce(func, wait) {
     };
 }
 
-uploadArea.addEventListener('click', () => fileInput.click());
+uploadArea.addEventListener('click', (e) => {
+    fileInput.click();
+});
 
 uploadArea.addEventListener('dragover', (e) => {
-    e.preventDefault();
     uploadArea.style.borderColor = '#de6360'; // Roman
 });
 
-uploadArea.addEventListener('dragleave', () => {
+uploadArea.addEventListener('dragleave', (e) => {
     uploadArea.style.borderColor = '#a50b5e'; // Jazzberry Jam
 });
 
 uploadArea.addEventListener('drop', (e) => {
-    e.preventDefault();
     uploadArea.style.borderColor = '#a50b5e'; // Jazzberry Jam
     handleFiles(e.dataTransfer.files);
 });
 
 fileInput.addEventListener('change', (e) => {
+    e.preventDefault(); // Prevent any default behavior
     handleFiles(e.target.files);
 });
 
@@ -49,13 +50,18 @@ function handleFiles(files) {
 function updatePreview() {
     performance.mark('updatePreview-start');
     requestAnimationFrame(() => {
-        preview.innerHTML = '';
+        // Only append new files instead of clearing
+        const existingItems = Array.from(preview.children);
+        const existingIndices = existingItems.map(item => parseInt(item.dataset.index, 10));
+        const newFiles = filesToUpload.filter((_, index) => !existingIndices.includes(index));
+
         uploadBtn.disabled = filesToUpload.length === 0;
 
-        filesToUpload.forEach((file, index) => {
+        newFiles.forEach((file, relativeIndex) => {
+            const index = filesToUpload.indexOf(file);
             const div = document.createElement('div');
             div.className = 'preview-item';
-            div.dataset.index = index; // Store index for event delegation
+            div.dataset.index = index;
 
             const removeBtn = document.createElement('button');
             removeBtn.className = 'remove-btn';
@@ -87,6 +93,12 @@ function updatePreview() {
             preview.appendChild(div);
         });
 
+        // Update indices of existing items
+        Array.from(preview.children).forEach((item, i) => {
+            const index = filesToUpload.indexOf(filesToUpload[i]);
+            if (index !== -1) item.dataset.index = index;
+        });
+
         performance.mark('updatePreview-end');
         performance.measure('updatePreview', 'updatePreview-start', 'updatePreview-end');
         console.log('updatePreview duration:', performance.getEntriesByName('updatePreview')[0].duration, 'ms');
@@ -95,11 +107,19 @@ function updatePreview() {
 
 // Event delegation for remove buttons
 preview.addEventListener('click', (e) => {
+    e.preventDefault(); // Prevent any default behavior
     if (e.target.classList.contains('remove-btn')) {
         performance.mark('removeBtn-start');
-        const index = parseInt(e.target.parentElement.dataset.index, 10);
+        const parent = e.target.parentElement;
+        const index = parseInt(parent.dataset.index, 10);
         filesToUpload.splice(index, 1);
-        debouncedUpdatePreview();
+        parent.remove(); // Remove only the specific thumbnail
+        // Update indices of remaining items
+        Array.from(preview.children).forEach((item, i) => {
+            const newIndex = filesToUpload.indexOf(filesToUpload[i]);
+            if (newIndex !== -1) item.dataset.index = newIndex;
+        });
+        uploadBtn.disabled = filesToUpload.length === 0;
         performance.mark('removeBtn-end');
         performance.measure('removeBtn', 'removeBtn-start', 'removeBtn-end');
         console.log('removeBtn duration:', performance.getEntriesByName('removeBtn')[0].duration, 'ms');
