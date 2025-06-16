@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta property="og:title" content=" Capture Our Day #DECARSONLOVESTORY25">
     <meta property="og:description" content="Share Your Most Beautiful&Loving Moment of Yours and Ours With us on Our Day, Lets Make a Memory that Last Forever">
-    <meta property="og:url" content="https://decarson25.onrender.com/">
+    <meta property="og:url" content="https://decarsonlovestory25.online/">
     <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'none';">
     <style>
         * {
@@ -320,6 +320,86 @@
                 gap: 10px;
             }
         }
+        .developer-footer {
+            background: linear-gradient(135deg, #a50b5e, #de6360);
+            color: #fff;
+            text-align: center;
+            padding: 2rem 1rem;
+            font-family: 'Lora', serif;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .developer-credit {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .developer-credit p {
+            font-size: 1.1rem;
+            margin: 0;
+            letter-spacing: 0.05em;
+        }
+
+        .heart {
+            color: red;
+            font-size: 1.3rem;
+            display: inline-block;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        .social-link {
+            color: #fff;
+            font-family: 'Cinzel', serif;
+            text-decoration: none;
+            position: relative;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .social-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: #fff;
+            transition: width 0.3s ease;
+        }
+
+        .social-link:hover {
+            color: #f5e6e8;
+            transform: scale(1.1);
+        }
+
+        .social-link:hover::after {
+            width: 100%;
+        }
+
+        .social-link:focus {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        @media (max-width: 600px) {
+            .developer-footer {
+                padding: 1.5rem 0.5rem;
+            }
+            .developer-credit p {
+                font-size: 1rem;
+            }
+        }
 @font-face {
   font-family: 'Cinzel';
   src: url('https://fonts.gstatic.com/s/cinzel/v25/8vIJ7ww63mVu7gt79mT7PkRXMw.woff2') format('woff2');
@@ -340,7 +420,7 @@
 </head>
 <body>
     <div class="background">
-        <video autoplay muted loop playsinline> <source src="/images/2nd.mp4" type="video/mp4" loading="lazy">your browser does not support video tag</video>
+        <video autoplay muted loop playsinline> <source src="/images/2nd.mp4" type="video/mp4">your browser does not support video tag</video>
     </div>
 
     <div class="container">
@@ -351,16 +431,17 @@
 
         <div class="celebrants">
             <div class="celebrant-card">
-                <img src="/images/GROOM.webp" alt="GROOM" loading="lazy">
+                <img src="/images/GROOM.webp" alt="GROOM" >
             </div>
+            
             <div class="celebrant-card">
-                <img src="/images/BRIDE.webp" alt="BRIDE" loading="lazy">
+                <img src="/images/BRIDE.webp" alt="BRIDE">
             </div>
         </div>
 
         <div class="upload-area" id="uploadArea">
             <p>Share Your Favorite Moment From Our Day With Us</p>
-            <p class="instructions">Drag & drop or click to upload photos and videos (JPG, PNG, MP4, etc.)</p>
+            <p class="instructions">Drag & drop or click to upload photos and videos (JPG, PNG, MP4, etc.) 15 files at once recommended</p>
             <input type="file" id="fileInput" multiple accept="image/*,video/*" style="display: none;">
         </div>
 
@@ -379,11 +460,19 @@
     </div>
 
     <footer>
-        Join Olushola & Omobolaji To Celebrate Our Wedding On June 22, 2025. <br>
-        <br>
-        <p>#DECARSONLOVESTORY25</p>
+        Celebrate <br> <p><span class="heart">♥</span> Olushola & Omobolaji's <span class="heart">♥</span></p>Wedding Day!!! 
+        <br> Share your favorite moments from June 22, 2025 by uploading photos and videos above. <br>
+        <p>#DECARSON <span class="heart">♥</span>STORY25</p>
     </footer>
-
+    <footer class="developer-footer">
+    <div class="developer-credit">
+        <p>Developed with <span class="heart">♥</span> by 
+            <a href="https://wa.link/3f2tvp" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Visit developer's Whatsapp Contact">
+            SGLDEV
+            </a>
+        </p>
+    </div>
+    </footer>
     <script src="script.js"></script>
 </body>
 </html>
