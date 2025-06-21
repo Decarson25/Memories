@@ -663,7 +663,7 @@
             const MAX_FILES = 15;
 
             if (!uploadArea || !fileInput || !errorMessage) {
-                console.error('Required elements not found in DOM');
+                // console.error('Required elements not found in DOM');
                 return;
             }
 
@@ -731,7 +731,7 @@
 
                 performance.mark('handleFiles-end');
                 performance.measure('handleFiles', 'handleFiles-start', 'handleFiles-end');
-                console.log('handleFiles duration:', performance.getEntriesByName('handleFiles')[0].duration, 'ms');
+                // console.log('handleFiles duration:', performance.getEntriesByName('handleFiles')[0].duration, 'ms');
             }
 
             const objectURLs = new Map(); // Track URLs by file reference
@@ -798,7 +798,7 @@
 
                     performance.mark('updatePreview-end');
                     performance.measure('updatePreview', 'updatePreview-start', 'updatePreview-end');
-                    console.log('updatePreview duration:', performance.getEntriesByName('updatePreview')[0].duration, 'ms');
+                    // console.log('updatePreview duration:', performance.getEntriesByName('updatePreview')[0].duration, 'ms');
                 });
             }
 
@@ -830,7 +830,7 @@
                     uploadBtn.disabled = filesToUpload.length === 0;
                     performance.mark('removeBtn-end');
                     performance.measure('removeBtn', 'removeBtn-start', 'removeBtn-end');
-                    console.log('removeBtn duration:', performance.getEntriesByName('removeBtn')[0].duration, 'ms');
+                    // console.log('removeBtn duration:', performance.getEntriesByName('removeBtn')[0].duration, 'ms');
                 }
             });
 
@@ -864,7 +864,7 @@
                             if (percentComplete >= 50 && !isServerPhase) {
                                 isServerPhase = true;
                                 progressBar.innerHTML = 'Uploading to Our Drive in background.<span class="animating-dot">.</span>';
-                                console.log('Browser-to-server upload complete, showing server phase message');
+                                // console.log('Browser-to-server upload complete, showing server phase message');
                             } else if (!isServerPhase) {
                                 progressBar.textContent = Math.round(percentComplete) + '%';
                             }
@@ -872,12 +872,12 @@
                     };
 
                     xhr.onload = () => {
-                        console.log('xhr.onload triggered, status:', xhr.status, 'response:', xhr.responseText);
+                        // console.log('xhr.onload triggered, status:', xhr.status, 'response:', xhr.responseText);
                         if (xhr.status === 200) {
                             if (!isServerPhase) {
                                 isServerPhase = true;
                                 progressBar.innerHTML = 'Uploading to Our Drive in background.<span class="animating-dot">.</span>';
-                                console.log('Set server phase message in xhr.onload');
+                                // console.log('Set server phase message in xhr.onload');
                             }
 
                             let serverProgress = 50;
@@ -888,7 +888,7 @@
                                     clearInterval(serverUploadSimulation);
                                 }
                                 progressBar.style.width = serverProgress + '%';
-                                console.log('Server simulation progress:', serverProgress);
+                                // console.log('Server simulation progress:', serverProgress);
                             }, 500);
 
                             try {
@@ -908,26 +908,26 @@
                                     uploadBtn.disabled = true;
                                     progressBar.style.width = '0%';
                                     progressBar.textContent = '0%';
-                                    console.log('Upload successful:', response);
+                                    // console.log('Upload successful:', response);
                                 } else {
                                     clearInterval(serverUploadSimulation);
                                     showError('Upload failed: ' + (response.message || 'Unknown error'));
                                     progressBar.textContent = '0%';
                                     uploadBtn.disabled = false;
-                                    console.error('Server response indicated failure:', response);
+                                    // console.error('Server response indicated failure:', response);
                                 }
                             } catch (err) {
                                 clearInterval(serverUploadSimulation);
                                 showError('Invalid server response');
                                 progressBar.textContent = '0%';
                                 uploadBtn.disabled = false;
-                                console.error('Error parsing server response:', err);
+                                // console.error('Error parsing server response:', err);
                             }
                         } else {
                             showError('Upload failed. Please try again.');
                             progressBar.textContent = '0%';
                             uploadBtn.disabled = false;
-                            console.error('xhr.onload error, status:', xhr.status);
+                            // console.error('xhr.onload error, status:', xhr.status);
                         }
                     };
 
@@ -935,17 +935,17 @@
                         showError('An error occurred during upload.');
                         progressBar.textContent = '0%';
                         uploadBtn.disabled = false;
-                        console.error('xhr.onerror triggered');
+                        // console.error('xhr.onerror triggered');
                     };
 
                     xhr.open('POST', '/api/upload', true);
                     xhr.send(formData);
-                    console.log('Upload request sent');
+                    // console.log('Upload request sent');
                 } catch (error) {
                     showError('Error: ' + error.message);
                     progressBar.textContent = '0%';
                     uploadBtn.disabled = false;
-                    console.error('Upload try-catch error:', error);
+                    // console.error('Upload try-catch error:', error);
                 }
             });
 
