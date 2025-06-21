@@ -392,62 +392,6 @@
                 overflow-y: auto;
             }
 
-            .media-modal {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
-                background: rgba(0, 0, 0, 0.9);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 9999;
-            }
-
-            .media-modal.hidden {
-                display: none;
-            }
-
-            .modal-content {
-                position: relative;
-                max-width: 90%;
-                max-height: 90%;
-            }
-
-            .modal-content img,
-            .modal-content video {
-                max-width: 100%;
-                max-height: 100%;
-                display: block;
-                margin: auto;
-                border-radius: 8px;
-            }
-
-            .modal-close {
-                position: absolute;
-                top: -20px;
-                right: -20px;
-                font-size: 2rem;
-                background: transparent;
-                color: white;
-                border: none;
-                cursor: pointer;
-            }
-
-            .modal-content .remove-btn {
-                position: absolute;
-                top: -20px;
-                left: -20px;
-                background: red;
-                color: white;
-                border: none;
-                font-size: 1.2rem;
-                cursor: pointer;
-                padding: 5px;
-                border-radius: 50%;
-            }
-
             .preview-item {
                 width: 50px;
                 height: 50px;
@@ -669,12 +613,6 @@
             <p class="instructions">Drag & drop or click to upload photos and videos (JPG, PNG, MP4, etc.) 15 files at
                 once recommended</p>
             <input type="file" id="fileInput" multiple accept="image/*,video/*" style="display: none;">
-        </div>
-
-        <div id="mediaModal" class="media-modal hidden">
-            <div class="modal-content" id="modalContent">
-                <button id="modalClose" class="modal-close" aria-label="Close modal">×</button>
-            </div>
         </div>
 
         <div id="errorMessage" role="alert" tabindex="-1" style="display: none;"></div>
