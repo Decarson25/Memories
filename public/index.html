@@ -392,6 +392,62 @@
                 overflow-y: auto;
             }
 
+            .media-modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.9);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 9999;
+            }
+
+            .media-modal.hidden {
+                display: none;
+            }
+
+            .modal-content {
+                position: relative;
+                max-width: 90%;
+                max-height: 90%;
+            }
+
+            .modal-content img,
+            .modal-content video {
+                max-width: 100%;
+                max-height: 100%;
+                display: block;
+                margin: auto;
+                border-radius: 8px;
+            }
+
+            .modal-close {
+                position: absolute;
+                top: -20px;
+                right: -20px;
+                font-size: 2rem;
+                background: transparent;
+                color: white;
+                border: none;
+                cursor: pointer;
+            }
+
+            .modal-content .remove-btn {
+                position: absolute;
+                top: -20px;
+                left: -20px;
+                background: red;
+                color: white;
+                border: none;
+                font-size: 1.2rem;
+                cursor: pointer;
+                padding: 5px;
+                border-radius: 50%;
+            }
+
             .preview-item {
                 width: 50px;
                 height: 50px;
@@ -615,6 +671,12 @@
             <input type="file" id="fileInput" multiple accept="image/*,video/*" style="display: none;">
         </div>
 
+        <div id="mediaModal" class="media-modal hidden">
+            <div class="modal-content" id="modalContent">
+                <button id="modalClose" class="modal-close" aria-label="Close modal">×</button>
+            </div>
+        </div>
+
         <div id="errorMessage" role="alert" tabindex="-1" style="display: none;"></div>
         <div id="preview"></div>
         <div id="progress" class="progress-bar" aria-live="polite"></div>
@@ -734,6 +796,8 @@
                 console.log('handleFiles duration:', performance.getEntriesByName('handleFiles')[0].duration, 'ms');
             }
 
+            const objectURLs = new Map(); // Track URLs by file reference
+
             function updatePreview() {
                 performance.mark('updatePreview-start');
                 requestAnimationFrame(() => {
@@ -755,23 +819,28 @@
                         removeBtn.setAttribute('aria-label', 'Remove file');
                         div.appendChild(removeBtn);
 
-                        if (file.type.startsWith('image/')) {
-                            const reader = new FileReader();
-                            reader.onload = (e) => {
+                        let objectURL;
+
+                        if (file.type.startsWith('image/') || file.type.startsWith('video/')) {
+                            objectURL = URL.createObjectURL(file);
+                            objectURLs.set(file, objectURL); // Track URL for cleanup
+
+                            if (file.type.startsWith('image/')) {
                                 const img = document.createElement('img');
-                                img.src = e.target.result;
+                                img.src = objectURL;
                                 img.alt = 'Uploaded image preview';
+                                img.onload = () => URL.revokeObjectURL(objectURL); // Revoke after loading
                                 div.insertBefore(img, removeBtn);
-                            };
-                            reader.readAsDataURL(file);
-                        } else if (file.type.startsWith('video/')) {
-                            const video = document.createElement('video');
-                            video.src = URL.createObjectURL(file);
-                            video.poster = video.src;
-                            video.preload = 'metadata';
-                            video.muted = true;
-                            video.setAttribute('aria-label', 'Uploaded video preview');
-                            div.insertBefore(video, removeBtn);
+                            } else {
+                                const video = document.createElement('video');
+                                video.src = objectURL;
+                                video.poster = objectURL;
+                                video.preload = 'metadata';
+                                video.muted = true;
+                                video.setAttribute('aria-label', 'Uploaded video preview');
+                                video.onloadeddata = () => URL.revokeObjectURL(objectURL); // Optional, revoke after load
+                                div.insertBefore(video, removeBtn);
+                            }
                         } else {
                             const placeholder = document.createElement('div');
                             placeholder.className = 'placeholder';
@@ -783,6 +852,7 @@
                         preview.appendChild(div);
                     });
 
+                    // Update indices after appending
                     Array.from(preview.children).forEach((item, i) => {
                         const index = filesToUpload.indexOf(filesToUpload[i]);
                         if (index !== -1) item.dataset.index = index;
@@ -794,18 +864,31 @@
                 });
             }
 
+
             preview.addEventListener('click', (e) => {
                 e.preventDefault();
                 if (e.target.classList.contains('remove-btn')) {
                     performance.mark('removeBtn-start');
                     const parent = e.target.parentElement;
                     const index = parseInt(parent.dataset.index, 10);
+                    const file = filesToUpload[index];
+
+                    // Clean up object URL if any
+                    const url = objectURLs.get(file);
+                    if (url) {
+                        URL.revokeObjectURL(url);
+                        objectURLs.delete(file);
+                    }
+
                     filesToUpload.splice(index, 1);
                     parent.remove();
+
+                    // Update remaining indices
                     Array.from(preview.children).forEach((item, i) => {
                         const newIndex = filesToUpload.indexOf(filesToUpload[i]);
                         if (newIndex !== -1) item.dataset.index = newIndex;
                     });
+
                     uploadBtn.disabled = filesToUpload.length === 0;
                     performance.mark('removeBtn-end');
                     performance.measure('removeBtn', 'removeBtn-start', 'removeBtn-end');
@@ -882,6 +965,8 @@
                                     }, 5000);
                                     filesToUpload = [];
                                     preview.innerHTML = '';
+                                    objectURLs.forEach(url => URL.revokeObjectURL(url));
+                                    objectURLs.clear();
                                     uploadBtn.disabled = true;
                                     progressBar.style.width = '0%';
                                     progressBar.textContent = '0%';
