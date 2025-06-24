@@ -589,382 +589,353 @@
 
     <body oncontextmenu="return false">
 
-    <div class="background">
-        <video autoplay muted loop playsinline>
-            <source src="/images/2nd.mp4" type="video/mp4">your browser does not support video tag
-        </video>
-    </div>
-
-    <div class="container">
-        <div class="header">
-            <h1>Capture Our Day</h1>
-            <p class="subtitle">Lets Make A Collection Of Our Wedding Memories</p>
+        <div class="background">
+            <video autoplay muted loop playsinline>
+                <source src="/images/2nd.mp4" type="video/mp4">your browser does not support video tag
+            </video>
         </div>
 
-        <div class="celebrants">
-            <div class="celebrant-card">
-                <img src="/images/GROOM.webp" alt="GROOM">
+        <div class="container">
+            <div class="header">
+                <h1>Capture Our Day</h1>
+                <p class="subtitle">Lets Make A Collection Of Our Wedding Memories</p>
             </div>
 
-            <div class="celebrant-card">
-                <img src="/images/BRIDE.webp" alt="BRIDE">
+            <div class="celebrants">
+                <div class="celebrant-card">
+                    <img src="/images/GROOM.webp" alt="GROOM">
+                </div>
+
+                <div class="celebrant-card">
+                    <img src="/images/BRIDE.webp" alt="BRIDE">
+                </div>
+            </div>
+
+            <div class="upload-area" id="uploadArea">
+                <p>Share Your Favorite Moment From Our Day With Us</p>
+                <p class="instructions">Drag & drop or click to upload photos and videos (JPG, PNG, MP4, etc.) 15 files
+                    at
+                    once recommended</p>
+                <input type="file" id="fileInput" multiple accept="image/*,video/*" style="display: none;">
+            </div>
+
+            <div id="errorMessage" role="alert" tabindex="-1" style="display: none;"></div>
+            <div id="preview"></div>
+            <div id="progress" class="progress-bar" aria-live="polite"></div>
+            <button id="uploadBtn" class="outer-cont flex" disabled>
+                <svg viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg">
+                    <g fill="none">
+                        <path
+                            d="m12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036q-.016-.004-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z">
+                        </path>
+                        <path
+                            d="M9.107 5.448c.598-1.75 3.016-1.803 3.725-.159l.06.16l.807 2.36a4 4 0 0 0 2.276 2.411l.217.081l2.36.806c1.75.598 1.803 3.016.16 3.725l-.16.06l-2.36.807a4 4 0 0 0-2.412 2.276l-.081.216l-.806 2.361c-.598 1.75-3.016 1.803-3.724.16l-.062-.160l-.806-2.36a4 4 0 0 0-2.276-2.412l-.216-.081l-2.36-.806c-1.751-.598-1.804-3.016-.16-3.724l.16-.062l2.36-.806A4 4 0 0 0 8.22 8.025l.081-.216zM11 6.094l-.806 2.36a6 6 0 0 1-3.49 3.649l-.25.091l-2.36.806l2.36.806a6 6 0 0 1 3.649 3.49l.091.25l.806 2.36l.806-2.36a6 6 0 0 1 3.49-3.649l.25-.09l2.36-.807l-2.36-.806a6 6 0 0 1-3.649-3.49l-.09-.25zM19 2a1 1 0 0 1 .898.56l.048.117l.35 1.026l1.027.35a1 1 0 0 1 .118 1.845l-.118.048l-1.026.35l-.350 1.027a1 1 0 0 1-1.845.117l-.048-.117l-.350-1.026l-1.027-.350a1 1 0 0 1-.118-1.845l.118-.048l1.026-.350l.350-1.027A1 1 0 0 1 19 2"
+                            fill="currentColor"></path>
+                    </g>
+                </svg>
+                SHARE MEMORIES
+            </button>
+            <div id="successMessage">🎉 Your precious memory has been safely stored in our digital treasure chest! 🎉
             </div>
         </div>
 
-        <div class="upload-area" id="uploadArea">
-            <p>Share Your Favorite Moment From Our Day With Us</p>
-            <p class="instructions">Drag & drop or click to upload photos and videos (JPG, PNG, MP4, etc.) 15 files
-                at
-                once recommended</p>
-            <input type="file" id="fileInput" multiple accept="image/*,video/*" style="display: none;">
-        </div>
+        <footer>
+            Celebrate <br>
+            <p><span class="heart">♥</span> Olushola & Omobolaji's <span class="heart">♥</span></p>Wedding Day!!!
+            <br> Share your favorite moments from June 22, 2025 by uploading photos and videos above. <br>
+            <p>#DECARSON <span class="heart">♥</span>STORY25</p>
+        </footer>
+        <footer class="developer-footer">
+            <div class="developer-credit">
+                <p>Developed with <span class="heart">♥</span> by
+                    <a href="https://wa.link/3f2tvp" target="_blank" rel="noopener noreferrer" class="social-link"
+                        aria-label="Visit developer's Whatsapp Contact">
+                        SGLDEV
+                    </a>
+                </p>
+            </div>
+        </footer>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const uploadArea = document.getElementById('uploadArea');
+                const fileInput = document.getElementById('fileInput');
+                const preview = document.getElementById('preview');
+                const uploadBtn = document.getElementById('uploadBtn');
+                const progressBar = document.getElementById('progress');
+                const successMessage = document.getElementById('successMessage');
+                const errorMessage = document.getElementById('errorMessage');
+                let filesToUpload = [];
+                const MAX_FILES = 15;
 
-        <div id="errorMessage" role="alert" tabindex="-1" style="display: none;"></div>
-        <div id="preview"></div>
-        <div id="progress" class="progress-bar" aria-live="polite"></div>
-        <button id="uploadBtn" class="outer-cont flex" disabled>
-            <svg viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg">
-                <g fill="none">
-                    <path
-                        d="m12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036q-.016-.004-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z">
-                    </path>
-                    <path
-                        d="M9.107 5.448c.598-1.75 3.016-1.803 3.725-.159l.06.16l.807 2.36a4 4 0 0 0 2.276 2.411l.217.081l2.36.806c1.75.598 1.803 3.016.16 3.725l-.16.06l-2.36.807a4 4 0 0 0-2.412 2.276l-.081.216l-.806 2.361c-.598 1.75-3.016 1.803-3.724.16l-.062-.160l-.806-2.36a4 4 0 0 0-2.276-2.412l-.216-.081l-2.36-.806c-1.751-.598-1.804-3.016-.16-3.724l.16-.062l2.36-.806A4 4 0 0 0 8.22 8.025l.081-.216zM11 6.094l-.806 2.36a6 6 0 0 1-3.49 3.649l-.25.091l-2.36.806l2.36.806a6 6 0 0 1 3.649 3.49l.091.25l.806 2.36l.806-2.36a6 6 0 0 1 3.49-3.649l.25-.09l2.36-.807l-2.36-.806a6 6 0 0 1-3.649-3.49l-.09-.25zM19 2a1 1 0 0 1 .898.56l.048.117l.35 1.026l1.027.35a1 1 0 0 1 .118 1.845l-.118.048l-1.026.35l-.350 1.027a1 1 0 0 1-1.845.117l-.048-.117l-.350-1.026l-1.027-.350a1 1 0 0 1-.118-1.845l.118-.048l1.026-.350l.350-1.027A1 1 0 0 1 19 2"
-                        fill="currentColor"></path>
-                </g>
-            </svg>
-            SHARE MEMORIES
-        </button>
-        <div id="successMessage">🎉 Your precious memory has been safely stored in our digital treasure chest! 🎉
-        </div>
-    </div>
-
-    <footer>
-        Celebrate <br>
-        <p><span class="heart">♥</span> Olushola & Omobolaji's <span class="heart">♥</span></p>Wedding Day!!!
-        <br> Share your favorite moments from June 22, 2025 by uploading photos and videos above. <br>
-        <p>#DECARSON <span class="heart">♥</span>STORY25</p>
-    </footer>
-    <footer class="developer-footer">
-        <div class="developer-credit">
-            <p>Developed with <span class="heart">♥</span> by
-                <a href="https://wa.link/3f2tvp" target="_blank" rel="noopener noreferrer" class="social-link"
-                    aria-label="Visit developer's Whatsapp Contact">
-                    SGLDEV
-                </a>
-            </p>
-        </div>
-    </footer>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const uploadArea = document.getElementById('uploadArea');
-            const fileInput = document.getElementById('fileInput');
-            const preview = document.getElementById('preview');
-            const uploadBtn = document.getElementById('uploadBtn');
-            const progressBar = document.getElementById('progress');
-            const successMessage = document.getElementById('successMessage');
-            const errorMessage = document.getElementById('errorMessage');
-            let filesToUpload = [];
-            const MAX_FILES = 15;
-
-            if (!uploadArea || !fileInput || !errorMessage) {
-                // console.error('Required elements not found in DOM');
-                return;
-            }
-
-            function debounce(func, wait) {
-                let timeout;
-                return function (...args) {
-                    clearTimeout(timeout);
-                    timeout = setTimeout(() => func.apply(this, args), wait);
-                };
-            }
-
-            function showError(message) {
-                errorMessage.textContent = message;
-                errorMessage.style.display = 'block';
-                errorMessage.focus();
-                setTimeout(() => {
-                    errorMessage.style.display = 'none';
-                }, 5000);
-            }
-
-            uploadArea.addEventListener('click', (e) => {
-                fileInput.click();
-            });
-
-            uploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadArea.style.borderColor = '#de6360';
-            });
-
-            uploadArea.addEventListener('dragleave', (e) => {
-                e.preventDefault();
-                uploadArea.style.borderColor = '#a50b5e';
-            });
-
-            uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadArea.style.borderColor = '#a50b5e';
-                handleFiles(e.dataTransfer.files);
-            });
-
-            fileInput.addEventListener('change', (e) => {
-                e.preventDefault();
-                handleFiles(e.target.files);
-                fileInput.value = '';
-            });
-
-            const debouncedUpdatePreview = debounce(updatePreview, 100);
-
-            function handleFiles(files) {
-                performance.mark('handleFiles-start');
-                const newFiles = Array.from(files);
-                const totalFiles = filesToUpload.length + newFiles.length;
-
-                if (totalFiles > MAX_FILES) {
-                    showError(`You can only upload a maximum of ${MAX_FILES} files at once. Please select fewer files.`);
-                    const allowedCount = MAX_FILES - filesToUpload.length;
-                    if (allowedCount > 0) {
-                        filesToUpload = filesToUpload.concat(newFiles.slice(0, allowedCount));
-                        debouncedUpdatePreview();
-                    }
-                } else {
-                    filesToUpload = filesToUpload.concat(newFiles);
-                    debouncedUpdatePreview();
-                }
-
-                performance.mark('handleFiles-end');
-                performance.measure('handleFiles', 'handleFiles-start', 'handleFiles-end');
-                // console.log('handleFiles duration:', performance.getEntriesByName('handleFiles')[0].duration, 'ms');
-            }
-
-            const objectURLs = new Map(); // Track URLs by file reference
-
-            function updatePreview() {
-                performance.mark('updatePreview-start');
-                requestAnimationFrame(() => {
-                    const existingItems = Array.from(preview.children);
-                    const existingIndices = existingItems.map(item => parseInt(item.dataset.index, 10));
-                    const newFiles = filesToUpload.filter((_, index) => !existingIndices.includes(index));
-
-                    uploadBtn.disabled = filesToUpload.length === 0;
-
-                    newFiles.forEach((file, relativeIndex) => {
-                        const index = filesToUpload.indexOf(file);
-                        const div = document.createElement('div');
-                        div.className = 'preview-item';
-                        div.dataset.index = index;
-
-                        const removeBtn = document.createElement('button');
-                        removeBtn.className = 'remove-btn';
-                        removeBtn.textContent = 'X';
-                        removeBtn.setAttribute('aria-label', 'Remove file');
-                        div.appendChild(removeBtn);
-
-                        let objectURL;
-
-                        if (file.type.startsWith('image/') || file.type.startsWith('video/')) {
-                            objectURL = URL.createObjectURL(file);
-                            objectURLs.set(file, objectURL); // Track URL for cleanup
-
-                            if (file.type.startsWith('image/')) {
-                                const img = document.createElement('img');
-                                img.src = objectURL;
-                                img.alt = 'Uploaded image preview';
-                                img.onload = () => URL.revokeObjectURL(objectURL); // Revoke after loading
-                                div.insertBefore(img, removeBtn);
-                            } else {
-                                const video = document.createElement('video');
-                                video.src = objectURL;
-                                video.poster = objectURL;
-                                video.preload = 'metadata';
-                                video.muted = true;
-                                video.setAttribute('aria-label', 'Uploaded video preview');
-                                video.onloadeddata = () => URL.revokeObjectURL(objectURL); // Optional, revoke after load
-                                div.insertBefore(video, removeBtn);
-                            }
-                        } else {
-                            const placeholder = document.createElement('div');
-                            placeholder.className = 'placeholder';
-                            placeholder.textContent = file.name;
-                            placeholder.setAttribute('aria-label', `Placeholder for ${file.name}`);
-                            div.insertBefore(placeholder, removeBtn);
-                        }
-
-                        preview.appendChild(div);
-                    });
-
-                    // Update indices after appending
-                    Array.from(preview.children).forEach((item, i) => {
-                        const index = filesToUpload.indexOf(filesToUpload[i]);
-                        if (index !== -1) item.dataset.index = index;
-                    });
-
-                    performance.mark('updatePreview-end');
-                    performance.measure('updatePreview', 'updatePreview-start', 'updatePreview-end');
-                    // console.log('updatePreview duration:', performance.getEntriesByName('updatePreview')[0].duration, 'ms');
-                });
-            }
-
-
-            preview.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (e.target.classList.contains('remove-btn')) {
-                    performance.mark('removeBtn-start');
-                    const parent = e.target.parentElement;
-                    const index = parseInt(parent.dataset.index, 10);
-                    const file = filesToUpload[index];
-
-                    // Clean up object URL if any
-                    const url = objectURLs.get(file);
-                    if (url) {
-                        URL.revokeObjectURL(url);
-                        objectURLs.delete(file);
-                    }
-
-                    filesToUpload.splice(index, 1);
-                    parent.remove();
-
-                    // Update remaining indices
-                    Array.from(preview.children).forEach((item, i) => {
-                        const newIndex = filesToUpload.indexOf(filesToUpload[i]);
-                        if (newIndex !== -1) item.dataset.index = newIndex;
-                    });
-
-                    uploadBtn.disabled = filesToUpload.length === 0;
-                    performance.mark('removeBtn-end');
-                    performance.measure('removeBtn', 'removeBtn-start', 'removeBtn-end');
-                    // console.log('removeBtn duration:', performance.getEntriesByName('removeBtn')[0].duration, 'ms');
-                }
-            });
-
-            uploadBtn.addEventListener('click', async (e) => {
-                e.preventDefault();
-
-                if (filesToUpload.length === 0) {
-                    showError('Please select at least one file!');
+                if (!uploadArea || !fileInput || !errorMessage) {
+                    // console.error('Required elements not found in DOM');
                     return;
                 }
 
-                uploadBtn.disabled = true;
-                progressBar.style.width = '0%';
-                progressBar.textContent = '0%';
-                successMessage.style.display = 'none';
-                errorMessage.style.display = 'none';
-
-                const formData = new FormData();
-                for (let i = 0; i < filesToUpload.length; i++) {
-                    formData.append('file', filesToUpload[i]);
+                function debounce(func, wait) {
+                    let timeout;
+                    return function (...args) {
+                        clearTimeout(timeout);
+                        timeout = setTimeout(() => func.apply(this, args), wait);
+                    };
                 }
 
-                try {
-                    const xhr = new XMLHttpRequest();
-                    let isServerPhase = false;
+                function showError(message) {
+                    errorMessage.textContent = message;
+                    errorMessage.style.display = 'block';
+                    errorMessage.focus();
+                    setTimeout(() => {
+                        errorMessage.style.display = 'none';
+                    }, 5000);
+                }
 
-                    xhr.upload.onprogress = (event) => {
-                        if (event.lengthComputable) {
-                            const percentComplete = (event.loaded / event.total) * 50;
-                            progressBar.style.width = percentComplete + '%';
-                            if (percentComplete >= 50 && !isServerPhase) {
-                                isServerPhase = true;
-                                progressBar.innerHTML = 'Uploading to Our Drive in background.<span class="animating-dot">.</span>';
-                                // console.log('Browser-to-server upload complete, showing server phase message');
-                            } else if (!isServerPhase) {
+                uploadArea.addEventListener('click', (e) => {
+                    fileInput.click();
+                });
+
+                uploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadArea.style.borderColor = '#de6360';
+                });
+
+                uploadArea.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    uploadArea.style.borderColor = '#a50b5e';
+                });
+
+                uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadArea.style.borderColor = '#a50b5e';
+                    handleFiles(e.dataTransfer.files);
+                });
+
+                fileInput.addEventListener('change', (e) => {
+                    e.preventDefault();
+                    handleFiles(e.target.files);
+                    fileInput.value = '';
+                });
+
+                const debouncedUpdatePreview = debounce(updatePreview, 100);
+
+                function handleFiles(files) {
+                    performance.mark('handleFiles-start');
+                    const newFiles = Array.from(files);
+                    const totalFiles = filesToUpload.length + newFiles.length;
+
+                    if (totalFiles > MAX_FILES) {
+                        showError(`You can only upload a maximum of ${MAX_FILES} files at once. Please select fewer files.`);
+                        const allowedCount = MAX_FILES - filesToUpload.length;
+                        if (allowedCount > 0) {
+                            filesToUpload = filesToUpload.concat(newFiles.slice(0, allowedCount));
+                            debouncedUpdatePreview();
+                        }
+                    } else {
+                        filesToUpload = filesToUpload.concat(newFiles);
+                        debouncedUpdatePreview();
+                    }
+
+                    performance.mark('handleFiles-end');
+                    performance.measure('handleFiles', 'handleFiles-start', 'handleFiles-end');
+                    // console.log('handleFiles duration:', performance.getEntriesByName('handleFiles')[0].duration, 'ms');
+                }
+
+                const objectURLs = new Map(); // Track URLs by file reference
+
+                function updatePreview() {
+                    performance.mark('updatePreview-start');
+                    requestAnimationFrame(() => {
+                        const existingItems = Array.from(preview.children);
+                        const existingIndices = existingItems.map(item => parseInt(item.dataset.index, 10));
+                        const newFiles = filesToUpload.filter((_, index) => !existingIndices.includes(index));
+
+                        uploadBtn.disabled = filesToUpload.length === 0;
+
+                        newFiles.forEach((file, relativeIndex) => {
+                            const index = filesToUpload.indexOf(file);
+                            const div = document.createElement('div');
+                            div.className = 'preview-item';
+                            div.dataset.index = index;
+
+                            const removeBtn = document.createElement('button');
+                            removeBtn.className = 'remove-btn';
+                            removeBtn.textContent = 'X';
+                            removeBtn.setAttribute('aria-label', 'Remove file');
+                            div.appendChild(removeBtn);
+
+                            let objectURL;
+
+                            if (file.type.startsWith('image/') || file.type.startsWith('video/')) {
+                                objectURL = URL.createObjectURL(file);
+                                objectURLs.set(file, objectURL); // Track URL for cleanup
+
+                                if (file.type.startsWith('image/')) {
+                                    const img = document.createElement('img');
+                                    img.src = objectURL;
+                                    img.alt = 'Uploaded image preview';
+                                    img.onload = () => URL.revokeObjectURL(objectURL); // Revoke after loading
+                                    div.insertBefore(img, removeBtn);
+                                } else {
+                                    const video = document.createElement('video');
+                                    video.src = objectURL;
+                                    video.poster = objectURL;
+                                    video.preload = 'metadata';
+                                    video.muted = true;
+                                    video.setAttribute('aria-label', 'Uploaded video preview');
+                                    video.onloadeddata = () => URL.revokeObjectURL(objectURL); // Optional, revoke after load
+                                    div.insertBefore(video, removeBtn);
+                                }
+                            } else {
+                                const placeholder = document.createElement('div');
+                                placeholder.className = 'placeholder';
+                                placeholder.textContent = file.name;
+                                placeholder.setAttribute('aria-label', `Placeholder for ${file.name}`);
+                                div.insertBefore(placeholder, removeBtn);
+                            }
+
+                            preview.appendChild(div);
+                        });
+
+                        // Update indices after appending
+                        Array.from(preview.children).forEach((item, i) => {
+                            const index = filesToUpload.indexOf(filesToUpload[i]);
+                            if (index !== -1) item.dataset.index = index;
+                        });
+
+                        performance.mark('updatePreview-end');
+                        performance.measure('updatePreview', 'updatePreview-start', 'updatePreview-end');
+                        // console.log('updatePreview duration:', performance.getEntriesByName('updatePreview')[0].duration, 'ms');
+                    });
+                }
+
+
+                preview.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (e.target.classList.contains('remove-btn')) {
+                        performance.mark('removeBtn-start');
+                        const parent = e.target.parentElement;
+                        const index = parseInt(parent.dataset.index, 10);
+                        const file = filesToUpload[index];
+
+                        // Clean up object URL if any
+                        const url = objectURLs.get(file);
+                        if (url) {
+                            URL.revokeObjectURL(url);
+                            objectURLs.delete(file);
+                        }
+
+                        filesToUpload.splice(index, 1);
+                        parent.remove();
+
+                        // Update remaining indices
+                        Array.from(preview.children).forEach((item, i) => {
+                            const newIndex = filesToUpload.indexOf(filesToUpload[i]);
+                            if (newIndex !== -1) item.dataset.index = newIndex;
+                        });
+
+                        uploadBtn.disabled = filesToUpload.length === 0;
+                        performance.mark('removeBtn-end');
+                        performance.measure('removeBtn', 'removeBtn-start', 'removeBtn-end');
+                        // console.log('removeBtn duration:', performance.getEntriesByName('removeBtn')[0].duration, 'ms');
+                    }
+                });
+
+                uploadBtn.addEventListener('click', async (e) => {
+                    e.preventDefault();
+
+                    if (filesToUpload.length === 0) {
+                        showError('Please select at least one file!');
+                        return;
+                    }
+
+                    uploadBtn.disabled = true;
+                    progressBar.style.width = '0%';
+                    progressBar.textContent = '0%';
+                    successMessage.style.display = 'none';
+                    errorMessage.style.display = 'none';
+
+                    const formData = new FormData();
+                    for (let i = 0; i < filesToUpload.length; i++) {
+                        formData.append('myFile', filesToUpload[i]);  // Use 'myFile' like in the first script
+                    }
+
+                    try {
+                        const xhr = new XMLHttpRequest();
+
+                        xhr.upload.onprogress = (event) => {
+                            if (event.lengthComputable) {
+                                const percentComplete = (event.loaded / event.total) * 50;
+                                progressBar.style.width = percentComplete + '%';
                                 progressBar.textContent = Math.round(percentComplete) + '%';
                             }
-                        }
-                    };
+                        };
 
-                    xhr.onload = () => {
-                        // console.log('xhr.onload triggered, status:', xhr.status, 'response:', xhr.responseText);
-                        if (xhr.status === 200) {
-                            if (!isServerPhase) {
-                                isServerPhase = true;
-                                progressBar.innerHTML = 'Uploading to Our Drive in background.<span class="animating-dot">.</span>';
-                                // console.log('Set server phase message in xhr.onload');
-                            }
+                        xhr.onload = () => {
+                            if (xhr.status === 200) {
+                                // Simulate server-to-Google Drive upload
+                                let serverProgress = 50;
+                                progressBar.textContent = 'Uploading to Google Drive...';
+                                const serverUploadSimulation = setInterval(() => {
+                                    serverProgress += 5;
+                                    if (serverProgress >= 100) {
+                                        serverProgress = 100;
+                                        clearInterval(serverUploadSimulation);
+                                    }
+                                    progressBar.style.width = serverProgress + '%';
+                                    progressBar.textContent = Math.round(serverProgress) + '%';
+                                }, 500);
 
-                            let serverProgress = 50;
-                            const serverUploadSimulation = setInterval(() => {
-                                serverProgress += 5;
-                                if (serverProgress >= 100) {
-                                    serverProgress = 100;
+                                try {
+                                    const response = JSON.parse(xhr.responseText);
+                                    if (response.success) {
+                                        clearInterval(serverUploadSimulation);
+                                        progressBar.style.width = '100%';
+                                        progressBar.textContent = '100%';
+                                        successMessage.style.display = 'block';
+                                        setTimeout(() => {
+                                            successMessage.style.display = 'none';
+                                        }, 5000);
+                                        filesToUpload = [];
+                                        preview.innerHTML = '';
+                                        objectURLs.forEach(url => URL.revokeObjectURL(url));
+                                        objectURLs.clear();
+                                        uploadBtn.disabled = true;
+                                        progressBar.style.width = '0%';
+                                        progressBar.textContent = '0%';
+                                    } else {
+                                        clearInterval(serverUploadSimulation);
+                                        showError('Upload failed: ' + (response.message || 'Unknown error'));
+                                        progressBar.textContent = '0%';
+                                        uploadBtn.disabled = false;
+                                    }
+                                } catch (err) {
                                     clearInterval(serverUploadSimulation);
-                                }
-                                progressBar.style.width = serverProgress + '%';
-                                // console.log('Server simulation progress:', serverProgress);
-                            }, 500);
-
-                            try {
-                                const response = JSON.parse(xhr.responseText);
-                                if (response.success) {
-                                    clearInterval(serverUploadSimulation);
-                                    progressBar.style.width = '100%';
-                                    progressBar.textContent = '100%';
-                                    successMessage.style.display = 'block';
-                                    setTimeout(() => {
-                                        successMessage.style.display = 'none';
-                                    }, 5000);
-                                    filesToUpload = [];
-                                    preview.innerHTML = '';
-                                    objectURLs.forEach(url => URL.revokeObjectURL(url));
-                                    objectURLs.clear();
-                                    uploadBtn.disabled = true;
-                                    progressBar.style.width = '0%';
-                                    progressBar.textContent = '0%';
-                                    // console.log('Upload successful:', response);
-                                } else {
-                                    clearInterval(serverUploadSimulation);
-                                    showError('Upload failed: ' + (response.message || 'Unknown error'));
+                                    showError('Invalid server response');
                                     progressBar.textContent = '0%';
                                     uploadBtn.disabled = false;
-                                    // console.error('Server response indicated failure:', response);
                                 }
-                            } catch (err) {
-                                clearInterval(serverUploadSimulation);
-                                showError('Invalid server response');
+                            } else {
+                                showError('Upload failed. Please try again.');
                                 progressBar.textContent = '0%';
                                 uploadBtn.disabled = false;
-                                // console.error('Error parsing server response:', err);
                             }
-                        } else {
-                            showError('Upload failed. Please try again.');
+                        };
+
+                        xhr.onerror = () => {
+                            showError('An error occurred during upload.');
                             progressBar.textContent = '0%';
                             uploadBtn.disabled = false;
-                            // console.error('xhr.onload error, status:', xhr.status);
-                        }
-                    };
+                        };
 
-                    xhr.onerror = () => {
-                        showError('An error occurred during upload.');
+                        xhr.open('POST', '/upload', true);  // Match the endpoint from the first script
+                        xhr.send(formData);
+                    } catch (error) {
+                        showError('Error: ' + error.message);
                         progressBar.textContent = '0%';
                         uploadBtn.disabled = false;
-                        // console.error('xhr.onerror triggered');
-                    };
-
-                    xhr.open('POST', '/api/upload', true);
-                    xhr.send(formData);
-                    // console.log('Upload request sent');
-                } catch (error) {
-                    showError('Error: ' + error.message);
-                    progressBar.textContent = '0%';
-                    uploadBtn.disabled = false;
-                    // console.error('Upload try-catch error:', error);
-                }
+                    }
+                });
             });
-
-            errorMessage.addEventListener('click', () => {
-                errorMessage.style.display = 'none';
-            });
-
-            errorMessage.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === 'Escape') {
-                    errorMessage.style.display = 'none';
-                }
-            });
-        });
-    </script>
-</body>
+        </script>
+    </body>
 
 </html>
