@@ -6,15 +6,17 @@ const path = require("path");
 require("dotenv").config();
 
 const app = express();
+const port = process.env.PORT || 3000; //use renders port
+
+// Google Drive API setup
+const SCOPE = ["https://www.googleapis.com/auth/drive"];
 
 // Configure Multer for disk storage (like working version)
 const upload = multer({
   dest: "uploads/", // Temporary directory for files
 });
 
-// Google Drive API setup
-const SCOPE = ["https://www.googleapis.com/auth/drive.file"];
-
+// authorize drive with drive api
 async function authorize() {
   const clientEmail = process.env.GOOGLE_CREDENTIALS_CLIENT_EMAIL;
   const privateKey = process.env.GOOGLE_CREDENTIALS_PRIVATE_KEY?.replace(
@@ -24,7 +26,7 @@ async function authorize() {
 
   if (!clientEmail || !privateKey) {
     throw new Error(
-      "Google Cloud credentials must be set in environment variables."
+      "Google Cloud credentials (GOOGLE_CLIENT_EMAIL and GOOGLE_PRIVATE_KEY) must be set in environment variables."
     );
   }
 
@@ -41,7 +43,7 @@ async function uploadFile(authClient, filePath, fileName) {
 
     const fileMetaData = {
       name: fileName,
-      parents: [process.env.GOOGLE_DRIVE_FOLDER_ID], // Your folder ID
+      parents: ["1nBLjMuFhzvsUOFW1I0RcrZT5ZThiC-h9"], // Your folder ID
     };
 
     drive.files.create(
@@ -67,7 +69,7 @@ async function uploadFile(authClient, filePath, fileName) {
 app.use(express.static(path.join(__dirname, "public")));
 
 // File upload route
-app.post("/api/upload", upload.array("file", 15), async (req, res) => {
+app.post("/upload", upload.array("myFile"), async (req, res) => {
   try {
     const authClient = await authorize();
     const files = req.files;
@@ -87,9 +89,9 @@ app.post("/api/upload", upload.array("file", 15), async (req, res) => {
     });
 
     await Promise.all(uploadPromises);
-    res.status(200).json({
+    res.json({
       success: true,
-      message: `Successfully uploaded ${files.length} file(s)`,
+      message: ` file (s) Successfully uploaded`,
     });
   } catch (err) {
     console.error("Upload error:", err);
@@ -98,7 +100,6 @@ app.post("/api/upload", upload.array("file", 15), async (req, res) => {
 });
 
 // Start server
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
 });
