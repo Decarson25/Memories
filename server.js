@@ -7,9 +7,9 @@ require("dotenv").config();
 
 const app = express();
 
-// Configure Multer for disk storage (like working version)
+// Configure Multer for disk storage (no file limits)
 const upload = multer({
-  dest: "uploads/", // Temporary directory for files
+  dest: "uploads/",
 });
 
 // Google Drive API setup
@@ -23,26 +23,21 @@ async function authorize() {
     throw new Error("Google Cloud credentials must be set in environment variables.");
   }
 
-  const jwtClient = new google.auth.JWT(
-    clientEmail,
-    null,
-    privateKey,
-    SCOPE
-  );
-
+  const jwtClient = new google.auth.JWT(clientEmail, null, privateKey, SCOPE);
   await jwtClient.authorize();
+  console.log("Google Drive API authorized successfully");
   return jwtClient;
 }
 
-// Upload file to Google Drive (like working version)
-async function uploadFile(authClient, filePath, fileName) {
+async function uploadFile(authClient, filePath, fileName, retryCount = 0, maxRetries = 3) {
   return new Promise((resolve, reject) => {
     const drive = google.drive({ version: "v3", auth: authClient });
-
     const fileMetaData = {
       name: fileName,
-      parents: [process.env.GOOGLE_DRIVE_FOLDER_ID], // Your folder ID
+      parents: [process.env.GOOGLE_DRIVE_FOLDER_ID],
     };
+
+    console.log(`Uploading file: ${fileName}, size: ${fs.statSync(filePath).size} bytes`);
 
     drive.files.create({
       resource: fileMetaData,
@@ -51,49 +46,89 @@ async function uploadFile(authClient, filePath, fileName) {
         mimeType: "application/octet-stream",
       },
       fields: "id",
-    }, (error, file) => {
+    }, async (error, file) => {
       if (error) {
+        console.error(`Upload error for ${fileName}:`, {
+          code: error.code,
+          message: error.message,
+          details: error.errors,
+          stack: error.stack,
+        });
+
+        // Retry on 500 or 503 errors with exponential backoff
+        if ((error.code === 500 || error.code === 503) && retryCount < maxRetries) {
+          const delay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
+          console.log(`Retrying upload for ${fileName} (attempt ${retryCount + 1}/${maxRetries}) after ${delay}ms`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+          return uploadFile(authClient, filePath, fileName, retryCount + 1, maxRetries)
+            .then(resolve)
+            .catch(reject);
+        }
+
         return reject(error);
       }
+
+      console.log(`Successfully uploaded ${fileName}, File ID: ${file.data.id}`);
       resolve(file);
     });
   });
 }
 
-// Middleware to serve static files
 app.use(express.static(path.join(__dirname, "public")));
 
-// File upload route
-app.post("/api/upload", upload.array("file", 15), async (req, res) => {
+// Error handling for Multer
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    console.error("Multer error:", {
+      code: err.code,
+      message: err.message,
+      field: err.field,
+    });
+    return res.status(400).json({ success: false, message: `Multer error: ${err.message}` });
+  }
+  next(err);
+});
+
+app.post("/api/upload", upload.array("file"), async (req, res) => {
   try {
+    console.log(`Received upload request with ${req.files?.length || 0} files`);
     const authClient = await authorize();
     const files = req.files;
 
     if (!files || files.length === 0) {
+      console.log("No files uploaded in request");
       return res.status(400).json({ success: false, message: "No files uploaded" });
     }
 
-    // Upload each file to Google Drive
     const uploadPromises = files.map(file => {
       return uploadFile(authClient, file.path, file.originalname)
         .then(() => {
-          // Delete temporary file
+          console.log(`Deleting temporary file: ${file.path}`);
           fs.unlinkSync(file.path);
+        })
+        .catch(error => {
+          console.error(`Failed to upload ${file.originalname}:`, error);
+          throw error;
         });
     });
 
     await Promise.all(uploadPromises);
+    console.log(`Successfully uploaded ${files.length} file(s)`);
     res.status(200).json({
       success: true,
       message: `Successfully uploaded ${files.length} file(s)`,
     });
   } catch (err) {
-    console.error("Upload error:", err);
+    console.error("Upload endpoint error:", {
+      message: err.message,
+      stack: err.stack,
+      code: err.code,
+      details: err.errors,
+    });
     res.status(500).json({ success: false, message: `Error: ${err.message}` });
   }
 });
 
-// Start server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
